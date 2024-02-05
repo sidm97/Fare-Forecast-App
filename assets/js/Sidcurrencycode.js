@@ -43,3 +43,14 @@ console.log(typeof(currencyName));
                 console.log("Currency code is : " + currencyCode);
                 let querycurrencyURL = currencyAPI + currencyCode;
                 console.log("Final URL for exchange rate search is : " + querycurrencyURL);
+                // below is exchange API to convert currency code to exchange rate
+                fetch(querycurrencyURL)
+                .then(function (response) {return response.json();})
+                .then(function (data) {
+                    let conversionRate = data.conversion_rate;
+                    let createdString = ("The current exchange rate from Pound Sterling (GBP) to " + currencyName + " (" + currencyCode + ") is " + conversionRate);
+                    console.log(createdString);
+                })
+        })
+    })
+})
