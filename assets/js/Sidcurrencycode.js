@@ -21,3 +21,25 @@ fetch(querylocationURL)
     console.log(data[0]);
     let locationCountry = data[0].country
     console.log("Country code for city is : " + locationCountry);
+// below is database to convert country code to currency code
+fetch(databaseLink)
+.then(function (response) {return response.json();}).then(function(data){
+    console.log(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry));
+    return(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry)); ;})
+.then(function (final) {
+let currencyName = final["ISO4217-currency_name"];
+console.log("Currency name is : " + currencyName);
+console.log(typeof(currencyName));
+                // Here are 2 if statements for the undesirable possibilities present in the country database
+                if (currencyName === null) {
+                    console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
+                return;
+                }
+                if (currencyName.indexOf(",") > -1) {
+                    console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
+                return;
+                }
+                let currencyCode = final["ISO4217-currency_alphabetic_code"];
+                console.log("Currency code is : " + currencyCode);
+                let querycurrencyURL = currencyAPI + currencyCode;
+                console.log("Final URL for exchange rate search is : " + querycurrencyURL);
