@@ -14,3 +14,10 @@ $("#submit").on("click", function () {
     console.log("searching for: " + searchString);
     querylocationURL = locationAPI + searchString + locationAPIkey;
     console.log("URL for weather API is : " + querylocationURL);
+// below is geocoding API code
+fetch(querylocationURL)
+.then(function (response) {return response.json();})
+.then(function (data) {
+    console.log(data[0]);
+    let locationCountry = data[0].country
+    console.log("Country code for city is : " + locationCountry);
