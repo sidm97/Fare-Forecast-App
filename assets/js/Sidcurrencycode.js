@@ -48,6 +48,9 @@ $("#button-addon2").on("click", function () {
                 .then(function (data) {
                     let conversionRate = data.conversion_rate;
                     let createdString = ("The current exchange rate from Pound Sterling (GBP) to " + currencyName + " (" + currencyCode + ") is " + conversionRate);
+                    $("<p>");
+                    let currencyEltext = $("p").text(createdString);
+                    $("#currency_exchange").append(currencyEltext);
                     console.log(createdString);
                 })
             })
