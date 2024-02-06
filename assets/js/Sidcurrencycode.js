@@ -8,37 +8,35 @@ let querylocationURL;
 let querycurrencyURL;
 
 // user submits city --> geocoding API takes the city and returns a country code --> another database, link below, takes country code and returns a currency code --> currency exchange API takes this currency code to return conversion ratez
-$("#submit").on("click", function () {
-    console.log("test");
-    $(".exchange_rate").empty();
+$("#button-addon2").on("click", function () {
     searchString = $("#city").val().toUpperCase();
     console.log("searching for: " + searchString);
     querylocationURL = locationAPI + searchString + locationAPIkey;
     console.log("URL for weather API is : " + querylocationURL);
-// below is geocoding API code
-fetch(querylocationURL)
-.then(function (response) {return response.json();})
-.then(function (data) {
-    console.log(data[0]);
-    let locationCountry = data[0].country
-    console.log("Country code for city is : " + locationCountry);
-// below is database to convert country code to currency code
-fetch(databaseLink)
-.then(function (response) {return response.json();}).then(function(data){
-    console.log(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry));
-    return(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry)); ;})
-.then(function (final) {
-let currencyName = final["ISO4217-currency_name"];
-console.log("Currency name is : " + currencyName);
-console.log(typeof(currencyName));
+    // below is geocoding API code
+    fetch(querylocationURL)
+    .then(function (response) {return response.json();})
+    .then(function (data) {
+        console.log(data[0]);
+        let locationCountry = data[0].country
+        console.log("Country code for city is : " + locationCountry);
+        // below is database to convert country code to currency code
+        fetch(databaseLink)
+        .then(function (response) {return response.json();}).then(function(data){
+            console.log(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry));
+            return(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry)); ;})
+            .then(function (final) {
+                let currencyName = final["ISO4217-currency_name"];
+                console.log("Currency name is : " + currencyName);
+                console.log(typeof(currencyName));
                 // Here are 2 if statements for the undesirable possibilities present in the country database
                 if (currencyName === null) {
                     console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
-                return;
+                    return;
                 }
                 if (currencyName.indexOf(",") > -1) {
                     console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
-                return;
+                    return;
                 }
                 let currencyCode = final["ISO4217-currency_alphabetic_code"];
                 console.log("Currency code is : " + currencyCode);
@@ -52,6 +50,8 @@ console.log(typeof(currencyName));
                     let createdString = ("The current exchange rate from Pound Sterling (GBP) to " + currencyName + " (" + currencyCode + ") is " + conversionRate);
                     console.log(createdString);
                 })
+            })
         })
+        
+        $(".form-control").val("");
     })
-})
