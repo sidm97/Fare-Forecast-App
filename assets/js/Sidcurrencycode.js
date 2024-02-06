@@ -55,7 +55,6 @@ $("#button-addon2").on("click", function () {
                     console.log(createdString);
                 })
             })
-        })
-
+        });
         $(".form-control").val("");
     })
