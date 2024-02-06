@@ -9,6 +9,7 @@ let querycurrencyURL;
 
 // user submits city --> geocoding API takes the city and returns a country code --> another database, link below, takes country code and returns a currency code --> currency exchange API takes this currency code to return conversion ratez
 $("#button-addon2").on("click", function () {
+    $("#currency_text").empty();
     searchString = $("#city").val().toUpperCase();
     console.log("searching for: " + searchString);
     querylocationURL = locationAPI + searchString + locationAPIkey;
@@ -31,11 +32,13 @@ $("#button-addon2").on("click", function () {
                 console.log(typeof(currencyName));
                 // Here are 2 if statements for the undesirable possibilities present in the country database
                 if (currencyName === null) {
-                    console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
+                    let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
+                    $("#currency_text").append(consolationString);
                     return;
                 }
                 if (currencyName.indexOf(",") > -1) {
-                    console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
+                    let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
+                    $("#currency_text").append(consolationString);
                     return;
                 }
                 let currencyCode = final["ISO4217-currency_alphabetic_code"];
@@ -48,9 +51,7 @@ $("#button-addon2").on("click", function () {
                 .then(function (data) {
                     let conversionRate = data.conversion_rate;
                     let createdString = ("The current exchange rate from Pound Sterling (GBP) to " + currencyName + " (" + currencyCode + ") is " + conversionRate);
-                    $("<p>");
-                    let currencyEltext = $("p").text(createdString);
-                    $("#currency_exchange").append(currencyEltext);
+                    $("#currency_text").append(createdString);
                     console.log(createdString);
                 })
             })
