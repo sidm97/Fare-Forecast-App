@@ -1,9 +1,69 @@
 /*Flight API*/
 
+#flight{
+    display: flex;
+    align-items: center;
+}
+
+/* Styling for the search form */
+#search-form input {
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 15px;
+    margin: 5px;
+    /* color: #dc7769; */
+    color: rgb(255, 255, 255, 0.7);
+
+    background-color: rgb(255, 255, 255,0.1);
+}
+
+::placeholder {
+    color: #dc7769;
+}
+
+#flight-btn {
+    color: white;
+    background-color: #dc7769;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 15px;
+    margin: 5px;
+}
+
+/* Styling for the datepickers */
+.datepicker td,th{
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: 'Manjari', sans-serif;
+    color: #dc7769;
+}
+
+/* Styling for the spinner */
+#spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    display: none;
+    margin-top: 3vh;
+}
+
+.spinner-grow {
+    opacity: 0.7;
+    width: 5vw;
+    height: 5vw;
+    margin-left: 40%;
+    margin-top: 20%;
+    background-color: #dc7769 ;
+}
+
 /* List Styling */
 ul {
     list-style: none;
-    padding-left:-10px
+    padding-left:0;
 }
 
 li {
@@ -40,28 +100,30 @@ li {
 .flight-display-o div, .flight-display-r div {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
 }
 
 /* Styling for the central divs */
 .centre-div-o, .centre-div-r, .more-outbound-display, .more-return-display {
     display:flex;
     flex-direction: row;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
 }
 
 .centre-o, .centre-r {
     display:flex;
     flex-direction: row;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
+    margin-left: 0.3vw;
 }
 
 hr {
     border: 1px solid #dc7769;
     width: 100%;
     display: inline-block;
+    margin-left:-3vw;
 }
 
 /* Styling for the more info div */
@@ -114,41 +176,8 @@ hr {
     background-color: #26313e;
 }
 
-/* Styling for the search form */
-#search-form input {
-    outline: none;
-    border: none;
-    border-radius: 15px;
-    padding: 5px 15px;
-    margin: 5px;
-    color: #dc7769;
-    /* color: white; */
 
-    background-color: rgb(255, 255, 255,0.1)
-}
 
-::placeholder {
-    color: #dc7769;
-}
-
-#flight-btn {
-    color: white;
-    background-color: #dc7769;
-    outline: none;
-    border: none;
-    border-radius: 15px;
-    padding: 5px 15px;
-    margin: 5px;
-}
-
-/* Styling for the datepickers */
-.datepicker td,th{
-    text-align: center;
-    padding: 8px 12px;
-    font-size: 14px;
-    font-family: 'Manjari', sans-serif;
-    color: #dc7769;
-}
 
 /* a6232b */
 /* ff6d48 */

@@ -8,6 +8,15 @@ const originInput = document.getElementById('origin-input');
 const destinationInput = document.getElementById('destination-input');
 const departureDate = document.getElementById('departure-date');
 const returnDate = document.getElementById('return-date');
+let spinner = document.getElementById('spinner');
+
+// `<div id="spinner">
+// <div class="spinner-grow text-light" role="status" aria-label="loading">
+// </div>      
+// </div>`;
+
+// 
+
 
 //Datepicker
 $('#departure-date').datepicker({
@@ -543,12 +552,14 @@ function flightData(departureCity, arrivalCity,arr) {
                 e.preventDefault();
                 
                 if(moreInfoDiv.style.display==='block') {
-                    moreInfoDiv.style.display='none';
+                    $('.more-div').slideUp();
+                    // moreInfoDiv.style.display='none';
                     arrivalTextboxO.innerHTML = outArrText;
                     departureTextboxR.innerHTML = retDepText;
                     moreBtn.innerHTML = 'See more';
 
                 } else{
+                    $('.more-div').slideDown();
                     moreInfoDiv.style.display='block';
                     arrivalTextboxO.innerHTML = moreArrivalTextboxOT.innerHTML;
                     departureTextboxR.innerHTML = moreDepartureTextboxRT.innerHTML;
@@ -596,6 +607,8 @@ function flightData(departureCity, arrivalCity,arr) {
             //Append Div to the index.html Div.
             flightDiv.append(flightContainer);
 
+            spinner.style.display="none";
+
             if (isDirect){
                 moreBtn.style.display='none';
             };   
@@ -614,6 +627,12 @@ function flightData(departureCity, arrivalCity,arr) {
         origin = '';
         destination='';
         flightDiv.innerHTML = '';
+        // flightDiv.innerHTML=`<div id="spinner">
+        // <div class="spinner-grow text-light" role="status" aria-label="loading">
+        // </div>      
+        // </div>`;
+
+//         
         let userInput = {currentCity: '', destinationCity: '', departureDate: '', returnDate:'', geocoded: {origin: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}, destination: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}}};
     };
 
@@ -633,8 +652,15 @@ function flightData(departureCity, arrivalCity,arr) {
         origin = userInput.currentCity;
         destination = userInput.destinationCity;
         
+        // flightDiv.innerHTML = spinner;
+        // spinner = document.getElementById('spinner');
+        spinner.style.display="block";
+        
         returnExists = true;
         queryInfo(userInput);
+
+        
+
     });
 
 
