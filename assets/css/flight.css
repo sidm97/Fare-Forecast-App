@@ -176,6 +176,25 @@ hr {
     background-color: #26313e;
 }
 
+.fare{
+    font-weight: 300;
+    font-family: 'Manjari', sans-serif;
+    opacity: 0.9;
+    color: #dc7769;
+}
+
+/* .f{
+    font-size: 1.3em;
+} */
+
+.forecast{
+    font-weight: 300;
+    font-family: 'Manjari', sans-serif;
+    opacity: 0.8;
+    color: white;
+    
+}
+
 
 
 

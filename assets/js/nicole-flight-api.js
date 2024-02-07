@@ -9,14 +9,6 @@ const departureDate = document.getElementById('departure-date');
 const returnDate = document.getElementById('return-date');
 let spinner = document.getElementById('spinner');
 
-// `<div id="spinner">
-// <div class="spinner-grow text-light" role="status" aria-label="loading">
-// </div>      
-// </div>`;
-
-// 
-
-
 //Datepicker
 $('#departure-date').datepicker({
     autoclose: true,
@@ -35,7 +27,8 @@ $('#return-date').datepicker({
 
 //Global Variables
 let userInput = {currentCity: '', destinationCity: '', departureDate: '', returnDate:'', geocoded: {origin: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}, destination: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}}};
-
+let userOrigin = originInput.value;
+let userDestination = destinationInput.value;
 let directFlights = 1;
 let originCode;
 let destinationCode;
@@ -67,8 +60,14 @@ let destinationArray=[];
 let originCodeArray=[];
 let destinationCodeArray=[];
 let isReturn = false;
+const errorDisplay = document.getElementById('error-display');
+const errorDiv = document.createElement('div');
+errorDiv.setAttribute('id', 'error-message');
+const errorMsg = `There is an error with your search. <br/>Please check your Internet connection`;
+const noFlights = 'We were unable to find flights for your chosen dates and cities. Please adjust your search and try again.'
 
-//Use Open Weather API to Geocode Origin and Destination Cities to their Latitude and Longitude Versions
+
+//Use Open Weather API to Geocode Origin and Destination Cities to Their Latitude and Longitude Versions
 function queryInfo (input) {
     const userQuery = input;
     originArray=[];
@@ -83,14 +82,18 @@ function queryInfo (input) {
             const lat = city?.lat;
             const lon = city?.lon;
             const cityData1 =[lat, lon, 1];
-            cityArray(cityData1);     
+            lat ? cityArray(cityData1) : errorCity(userOrigin);
+        }).catch((err)=>{
+            errorMessage (errorMsg);
         }),
         fetch(destinationCode).then((response) => {return response.json()}).then((data2) =>{  
             const city = data2[0];
             const lat = city?.lat;
             const lon = city?.lon;
             const cityData2 =[lat, lon];
-            cityArray(cityData2);
+            lat ? cityArray(cityData2) : errorCity(userDestination); 
+        }).catch((err)=>{
+            errorMessage (errorMsg);
         }),
     ]);
 };
@@ -113,12 +116,9 @@ function nearestAirport() {
     let destinationLat = destinationArray[0];
     let destinationLon = destinationArray[1];
    
-    // console.log(originArray);
-
     const originQuery = `https://api.lufthansa.com/v1/mds-references/airports/nearest/${originLat},${originLon}`;
     const destinationQuery = `https://api.lufthansa.com/v1/mds-references/airports/nearest/${destinationLat},${destinationLon}`;
 
-    // console.log(destinationQuery);
     // Fetch requests
     Promise.all([
         fetch(originQuery , {
@@ -136,12 +136,13 @@ function nearestAirport() {
                     originCodeArray.push(airportItem);
                 });
 
-                // console.log('input1', userInput.geocoded.origin.cityCode)
                 return code;
         }).then((code)=>{
                 console.log('input2', userInput.geocoded.origin.cityCode);
                 const codeArray = [code,1];
-                outbound(codeArray); 
+                code ? outbound(codeArray) : errorCode(userOrigin); 
+        }).catch((err)=>{
+            errorMessage (errorMsg);
         }),
         fetch(destinationQuery , {
             headers: {Authorization: `Bearer ${token}`}
@@ -160,8 +161,9 @@ function nearestAirport() {
                 // console.log(data2.NearestAirportResource.Airports.Airport[0].Names.Name[0].$);
                 return code;
         }).then((code2)=>{
-                // console.log('input2', userInput.geocoded.destination.cityCode);
-                outbound(code2);  
+                code2 ? outbound(code2) : errorCode(userDestination);
+        }).catch((err)=>{
+            errorMessage (errorMsg);
         })
       ]);
 };
@@ -195,21 +197,21 @@ function flightData(departureCity, arrivalCity,arr) {
             return response.json();
         })
         .then((data) => {  
-            const flights = data.ScheduleResource.Schedule;
+            const flights = data?.ScheduleResource.Schedule;
             console.log(flights);
 
             //Check Whether or Not Flight Is Direct
-            isDirect = data.ScheduleResource.Schedule[0].Flight.Departure;
+            isDirect = data?.ScheduleResource.Schedule[0].Flight.Departure;
         
-            isDirect ? flight = data.ScheduleResource.Schedule[0].Flight : flight = data.ScheduleResource.Schedule[0].Flight[0];
-            totalDuration = data.ScheduleResource.Schedule[0].TotalJourney.Duration;             
+            isDirect ? flight = data?.ScheduleResource.Schedule[0].Flight : flight = data?.ScheduleResource.Schedule[0].Flight[0];
+            totalDuration = data?.ScheduleResource.Schedule[0].TotalJourney.Duration;             
         
             //Flight Information
             //Origin City
             origin = departureCity;
            
             //Flight Origin Airport
-            const outboundDepAirport = flight.Departure.AirportCode;
+            const outboundDepAirport = flight?.Departure.AirportCode;
 
             isReturn ? userInput : userInput.geocoded.origin.airportCode = outboundDepAirport;
            
@@ -221,11 +223,11 @@ function flightData(departureCity, arrivalCity,arr) {
             isReturn ? destination = userInput.geocoded.origin.airportName : origin = userInput.geocoded.origin.airportName;
 
             //Origin Flight Number
-            let carrier = flight.MarketingCarrier;
+            let carrier = flight?.MarketingCarrier;
             const outboundNum = `${carrier.AirlineID} ${carrier.FlightNumber}`;
 
             //Origin Date
-            const outboundDateTime = flight.Departure.ScheduledTimeLocal.DateTime;
+            const outboundDateTime = flight?.Departure.ScheduledTimeLocal.DateTime;
             const outboundDepDate = outboundDateTime.slice(0,10).split('-').reverse().join('/');
             
             //Origin Time
@@ -233,25 +235,25 @@ function flightData(departureCity, arrivalCity,arr) {
             
             //Transfer Information - Only for Non-Direct Flights
             //Transfer Arrival Date
-            const transferArrDate = flight.Arrival.ScheduledTimeLocal.DateTime.slice(0,10).split('-').reverse().join('/');
+            const transferArrDate = flight?.Arrival.ScheduledTimeLocal.DateTime.slice(0,10).split('-').reverse().join('/');
 
             //Transfer Arrival Time
-            const transferArrTime = flight.Arrival.ScheduledTimeLocal.DateTime.slice(11,16);
+            const transferArrTime = flight?.Arrival.ScheduledTimeLocal.DateTime.slice(11,16);
 
             //Transfer Airport
-            const transferArrAirport = flight.Arrival.AirportCode;
+            const transferArrAirport = flight?.Arrival.AirportCode;
 
             //Transfer Stopover
             const stopover = 'stopover';
 
-            isDirect ? flight = data.ScheduleResource.Schedule[0].Flight : flight = data.ScheduleResource.Schedule[0]?.Flight[2] ||  data.ScheduleResource.Schedule[0].Flight[1] ;
+            isDirect ? flight = data?.ScheduleResource.Schedule[0].Flight : flight = data?.ScheduleResource.Schedule[0]?.Flight[2] ||  data?.ScheduleResource.Schedule[0].Flight[1] ;
 
             //Outbound Transfer Flight Number
-            const transferCarrier = flight.MarketingCarrier;
+            const transferCarrier = flight?.MarketingCarrier;
             const transferNum = `${transferCarrier.AirlineID} ${transferCarrier.FlightNumber}`;
 
             //Outbound Transfer Depature Date
-            const transferDateTime = flight.Departure.ScheduledTimeLocal.DateTime;
+            const transferDateTime = flight?.Departure.ScheduledTimeLocal.DateTime;
             const transferDepDate = transferDateTime.slice(0,10).split('-').reverse().join('/');
             
             //Outbound Transfer Depature Time
@@ -261,13 +263,13 @@ function flightData(departureCity, arrivalCity,arr) {
             destination = arrivalCity;
 
             //Outbound Flight Arrival Date 
-            const outboundArrDate = flight.Arrival.ScheduledTimeLocal.DateTime.slice(0,10).split('-').reverse().join('/');
+            const outboundArrDate = flight?.Arrival.ScheduledTimeLocal.DateTime.slice(0,10).split('-').reverse().join('/');
 
             //Outbound Flight Arrival Time
-            const outboundArrTime = flight.Arrival.ScheduledTimeLocal.DateTime.slice(11,16);
+            const outboundArrTime = flight?.Arrival.ScheduledTimeLocal.DateTime.slice(11,16);
 
             //Outbound Flight Arrival Airport
-            const outboundArrAirport = flight.Arrival.AirportCode;
+            const outboundArrAirport = flight?.Arrival.AirportCode;
 
             destinationCodeArray.map((item)=>{
                 item.code === outboundArrAirport ? userInput.geocoded.destination.airportName = item.name : item;
@@ -293,10 +295,10 @@ function flightData(departureCity, arrivalCity,arr) {
             flightInfo = [departureInfo, transferInfo, arrivalInfo];
             arr = flightInfo;
 
-            outboundFlight(flightInfo);
+            data ? outboundFlight(flightInfo) : errorMessage(noFlights);
 
         }).catch((err)=>{
-            console.log('No flights found with your selected cities. Please try another location', err);
+            errorMessage (errorMsg);
         });
         return flightInfo;
 };
@@ -614,6 +616,28 @@ function flightData(departureCity, arrivalCity,arr) {
         };
     };
 
+    //Create City Not Found Error Message
+    function errorCity(place){
+        let location = place;
+        const notFound = `We couldn't find ${location}. Try again with a different city.`;
+        errorMessage(notFound);
+    }
+
+    function errorCode(place){
+        let location = place;
+        const notFound = `We couldn't find any airports near ${location}. Try again with a different city.`;
+        errorMessage(notFound);
+    }
+    
+    //Display error message
+    function errorMessage (message) {
+        spinner.style.display='none';
+        errorDiv.innerHTML = message;
+        errorDisplay.appendChild(errorDiv);
+        errorDiv.style.display = 'block';
+        let timeout = setTimeout(()=>{errorDiv.style.display = 'none'}, 5000);
+    };
+
 //Set Values to Zero When Search Button Is Clicked
     function initialise () {
         outboundArray = [];
@@ -625,13 +649,7 @@ function flightData(departureCity, arrivalCity,arr) {
         isReturn = false;
         origin = '';
         destination='';
-        flightDiv.innerHTML = '';
-        // flightDiv.innerHTML=`<div id="spinner">
-        // <div class="spinner-grow text-light" role="status" aria-label="loading">
-        // </div>      
-        // </div>`;
-
-//         
+        flightDiv.innerHTML = '';        
         let userInput = {currentCity: '', destinationCity: '', departureDate: '', returnDate:'', geocoded: {origin: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}, destination: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}}};
     };
 
@@ -639,8 +657,8 @@ function flightData(departureCity, arrivalCity,arr) {
     flightBtn.addEventListener('click', (e)=>{
         e.preventDefault();
         initialise();
-        const city = document.getElementById('city');
-        city.value = destinationInput.value;
+        userOrigin = originInput.value;
+        userDestination = destinationInput.value;
         let originSearch = originInput.value.toLowerCase().trim();
         let destinationSearch = destinationInput.value.toLowerCase().trim();
         let depDate = departureDate.value;
@@ -652,9 +670,6 @@ function flightData(departureCity, arrivalCity,arr) {
         
         origin = userInput.currentCity;
         destination = userInput.destinationCity;
-        
-        // flightDiv.innerHTML = spinner;
-        // spinner = document.getElementById('spinner');
         spinner.style.display="block";
         
         returnExists = true;
