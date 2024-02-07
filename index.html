@@ -19,12 +19,13 @@
         <h1><span class="fare"><span class="f">f</span> a r e </span> <span class="forecast"><span class="f">f</span> o r e c a s t</span></h1>
     </header> 
     <div class="flightSearch">
+
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Where would you like to go?" aria-label="Recipient's username" aria-describedby="button-addon2" id="city">
             <button class="btn btn-outline-secondary" type="button" id="button-addon2">GO</button>
-          </div>
-    </div>
-    <div id="user-input">
+          </div> -->
+   
+    <div class= "mb-3" id= "user-input">
         <form id="search-form" class="form">
                 <div class="input-group">
                  <input class="form-input" type="text" id="origin-input" placeholder=" Origin City"
@@ -34,13 +35,13 @@
                   <input type="text" name="" id="departure-date" placeholder=" Departure Date"/>
                   <input type="text" name="" id="return-date" placeholder=" Return Date" />
                     <div class="input-group-append">
-                        <button type="submit" class="btn search-button" aria-label="submit search" id="flight-btn">Find Flights!
-                        </button>
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Find Flights</button>
+                        <!-- <button type="submit" class="btn search-button" aria-label="submit search" id="flight-btn">Find Flights! 
+                        </button> -->
                     </div> 
                 </div>
         </form>    
     </div>
-   
     <div class="grid-container">
         
         <div id="flight" class="first card"> 
@@ -62,10 +63,8 @@
                 </p>
         </div>
         <div id="currency_exchange" class="first card">        
-            <h2>Currency Exchange</h2>
-                <p>
-                    Currency Exchange Rate for the Destination.
-                </p>
+            <h2>Currency Exchange Rates</h2>
+            <p id="currency_text"></p>
         </div>
     </div> 
                     
