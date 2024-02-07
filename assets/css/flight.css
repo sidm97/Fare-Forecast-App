@@ -60,6 +60,22 @@
     background-color: #dc7769 ;
 }
 
+/* Error Message */
+#error-display{
+    display: flex;
+    justify-content: center;
+}
+
+#error-message {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 5px 10px;
+    color: red; 
+    font-size: 0.9rem;
+    text-align: center;
+    width: 25vw;
+}
+
 /* List Styling */
 ul {
     list-style: none;
@@ -191,8 +207,7 @@ hr {
     font-weight: 300;
     font-family: 'Manjari', sans-serif;
     opacity: 0.8;
-    color: white;
-    
+    color: white; 
 }
 
 
