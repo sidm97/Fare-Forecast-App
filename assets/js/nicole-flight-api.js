@@ -671,11 +671,14 @@ function flightData(departureCity, arrivalCity,arr) {
         origin = userInput.currentCity;
         destination = userInput.destinationCity;
         spinner.style.display="block";
-        
         returnExists = true;
-        queryInfo(userInput);
 
-        
+        if (originInput.value && destinationInput.value && depDate && retDate){
+            queryInfo(userInput);
+        } else {
+            let errorInput = "Please fill in all the search details."
+            errorMessage(errorInput);
+        };       
 
     });
 
