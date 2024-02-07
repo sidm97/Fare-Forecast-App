@@ -24,6 +24,7 @@ body {
 .header h1 {
     display: inline-block;
     font-size: 48px;
+    
 }
 
 p {
@@ -41,9 +42,9 @@ p {
 }
 .mb-3{
     position:absolute;
-    margin-left: 30%;
+    margin-left: 20%;
     margin-top: 10%;
-    width: 600px;
+    width: 900px;
 }
 
 .grid-container{
@@ -58,7 +59,7 @@ p {
 }
 
 .card {
-    background-color: aquamarine;
+    background-color: rgb(61, 145, 130);
 }
 
 .footer h2 {
