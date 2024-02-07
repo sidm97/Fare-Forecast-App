@@ -1,0 +1,154 @@
+/*Flight API*/
+
+/* List Styling */
+ul {
+    list-style: none;
+    padding-left:-10px
+}
+
+li {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    color: rgb(255, 255, 255, 0.7);
+}
+
+/* Styling for the divs containing the text divs */
+.flight-textbox-o,  .more-o-departure-textbox, .more-r-departure-textbox, .more-o-arrival-textbox, .more-r-arrival-textbox {    
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px #dc7769 dashed;
+    width: 30vw;
+}
+
+.flight-textbox-o {
+    border-radius: 10px 10px 0 0;
+}
+
+.flight-textbox-r {
+    border-radius: 0 0 10px 10px;
+}
+
+.flight-display-o, .flight-display-r, .more-outbound-display, .more-return-display, .more-outbound-title, .more-return-title {
+    display: flex;
+    flex-direction: row;
+    width: 30vw;
+    justify-content: center;
+    margin: 10px;
+}
+
+.flight-display-o div, .flight-display-r div {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+/* Styling for the central divs */
+.centre-div-o, .centre-div-r, .more-outbound-display, .more-return-display {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.centre-o, .centre-r {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+hr {
+    border: 1px solid #dc7769;
+    width: 100%;
+    display: inline-block;
+}
+
+/* Styling for the more info div */
+.more-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.more-outbound, .more-return {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.more-outbound-title, .more-return-title {
+    display: flex;
+    margin-left: -2vw;
+    font-size: 1rem;
+}
+
+.more-outbound-display, .more-return-display {
+    margin-top: 10px;
+    width: 30vw;
+}
+
+.more-o-departure-textbox, .more-r-departure-textbox, .more-o-arrival-textbox, .more-r-arrival-textbox {
+  padding-bottom: 10px;
+}
+
+.more-o-departure-textbox, .more-r-departure-textbox {
+    width: 40vw;
+}
+
+.more-o-arrival-textbox, .more-r-arrival-textbox {
+    width: 20vw;
+}
+
+.more-button {
+    border:none;
+    border-radius: 15px;
+    outline: none;
+    color: white;
+    background-color: #dc7769;
+    height: 5vh;
+    width: 30vw;
+}
+
+.more-button:hover, #flight-btn:hover {
+    background-color: #26313e;
+}
+
+/* Styling for the search form */
+#search-form input {
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 15px;
+    margin: 5px;
+    color: #dc7769;
+    /* color: white; */
+
+    background-color: rgb(255, 255, 255,0.1)
+}
+
+::placeholder {
+    color: #dc7769;
+}
+
+#flight-btn {
+    color: white;
+    background-color: #dc7769;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 15px;
+    margin: 5px;
+}
+
+/* Styling for the datepickers */
+.datepicker td,th{
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: 'Manjari', sans-serif;
+    color: #dc7769;
+}
+
+/* a6232b */
+/* ff6d48 */

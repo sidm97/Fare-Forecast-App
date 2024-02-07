@@ -11,7 +11,13 @@
 }
 
 body {
-    background-color: #d9dcd6;
+    background-color: #446372;
+    font-family: 'Manjari', sans-serif;
+    
+}
+
+::placeholder {
+    color: #dc7769;
 }
 
 .header {
@@ -19,6 +25,7 @@ body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: #2a607c;
     color: #ffffff;
+    
 }
 
 .header h1 {
@@ -50,7 +57,7 @@ p {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 500px;
-    gap: 10px  
+    gap: 10px;  
 }
 
 .first {
@@ -58,10 +65,15 @@ p {
 }
 
 .card {
-    background-color: aquamarine;
+    background-color: #446372;
+    border: none;
 }
 
 .footer h2 {
     font-size: 10px;
     clear: both;
 }
+
+
+
+
