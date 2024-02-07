@@ -1,6 +1,5 @@
 const apiKey = '65460f2d682dbe6e454f0b9ada6fd285';
-const token = 'bx3vecg6ta4zvvf536zuu9v3';
-
+const token = '9gkz3eee56n6thj7u6jxw35d';
 //HTML Elements
 const flightDiv = document.getElementById('flight-info');
 const flightBtn = document.getElementById('flight-btn');
@@ -640,6 +639,8 @@ function flightData(departureCity, arrivalCity,arr) {
     flightBtn.addEventListener('click', (e)=>{
         e.preventDefault();
         initialise();
+        const city = document.getElementById('city');
+        city.value = destinationInput.value;
         let originSearch = originInput.value.toLowerCase().trim();
         let destinationSearch = destinationInput.value.toLowerCase().trim();
         let depDate = departureDate.value;
