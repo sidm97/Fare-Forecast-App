@@ -92,6 +92,7 @@ $("#flight-btn").on("click", function (event) {
                     let conversionRate = data.conversion_rate;
                     let createdString = ("The current exchange rate from " + originCurrencyname + " (" + origincurrencyCode + ") to " + destinationCurrencyname + " (" + destinationcurrencyCode + ") is " + conversionRate);
                     $("#currency_text").append(createdString);
+                    $("#currency-display").html(conversionRate);
                     console.log(createdString);
                 })
             })

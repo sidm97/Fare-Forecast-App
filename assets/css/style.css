@@ -95,8 +95,24 @@ p {
     align-items: center;
 }
 
+#currency-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#currency-box {
+    background-color: rgb(29, 45, 62, 0.6);
+    padding: 10px;
+    border-radius: 10px;
+    width:95%;
+    height: 30vh;
+}
 
-
+#currency-display {
+    font-size: 6.9vh;
+    text-align:center;
+}
 
 .footer h2 {
     font-size: 10px;

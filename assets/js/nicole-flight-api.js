@@ -8,6 +8,7 @@ const destinationInput = document.getElementById('destination-input');
 const departureDate = document.getElementById('departure-date');
 const returnDate = document.getElementById('return-date');
 let spinner = document.getElementById('spinner');
+const currency = document.getElementById('currency-display');
 
 //Datepicker
 $('#departure-date').datepicker({
@@ -668,14 +669,17 @@ function flightData(departureCity, arrivalCity,arr) {
     flightBtn.addEventListener('click', (e)=>{
         e.preventDefault();
         initialise();
+        currency.innerHTML='';
         userOrigin = originInput.value;
         userDestination = destinationInput.value;
         let originSearch = originInput.value.toLowerCase().trim();
         let destinationSearch = destinationInput.value.toLowerCase().trim();
         let depDate = departureDate.value;
         let retDate = returnDate.value;
-        userInput.currentCity = originSearch.split(' ').join('');
-        userInput.destinationCity = destinationSearch.split(' ').join('');
+        // userInput.currentCity = originSearch.split(' ').join('');
+        // userInput.destinationCity = destinationSearch.split(' ').join('');
+        userInput.currentCity = originSearch;
+        userInput.destinationCity = destinationSearch;
         userInput.departureDate = departureDate.value.split('-').reverse().join('-');
         userInput.returnDate = returnDate.value.split('-').reverse().join('-');
         
