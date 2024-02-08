@@ -10,7 +10,7 @@ let queryoriginURL
 let querycurrencyURL;
 
 // user submits city --> geocoding API takes the city and returns a country code --> another database, link below, takes country code and returns a currency code --> currency exchange API takes this currency code to return conversion ratez
-$("#button-addon2").on("click", function () {
+$("#flight-btn").on("click", function () {
     event.preventDefault();
     $("#currency_text").empty();
     destinationString = $("#destination-input").val().toUpperCase();
@@ -98,7 +98,7 @@ $("#button-addon2").on("click", function () {
         })
     })
     })
-        $("#destination-input").val("");
-        $("#origin-input").val("");
+        // $("#destination-input").val("");
+        // $("#origin-input").val("");
 
     })
