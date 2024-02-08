@@ -1,7 +1,7 @@
 $(document).ready(function () {
   const apiKey = `359fbb9063e60407b575e9a14683190b`; // Use your actual API key
 
-  $("#button-addon2").on("click", function () {
+  $("#flight-btn").on("click", function () {
     // e.preventDefault();
     const city = $("#destination-input").val();
     if (city) {

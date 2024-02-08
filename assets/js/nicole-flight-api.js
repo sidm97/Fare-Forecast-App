@@ -63,7 +63,7 @@ let isReturn = false;
 const errorDisplay = document.getElementById('error-display');
 const errorDiv = document.createElement('div');
 errorDiv.setAttribute('id', 'error-message');
-const errorMsg = `There is an error with your search. <br/>Please check your Internet connection`;
+const errorMsg = `There is an error with your search. <br/>Please try again.`;
 const noFlights = 'We were unable to find flights for your chosen dates and cities. Please adjust your search and try again.'
 
 
@@ -209,17 +209,22 @@ function flightData(departureCity, arrivalCity,arr) {
             //Flight Information
             //Origin City
             origin = departureCity;
-           
+            // userInput.geocoded.origin.airportName = 'Airport';
+            // userInput.geocoded.destination.airportName = 'Airport';
+
             //Flight Origin Airport
             const outboundDepAirport = flight?.Departure.AirportCode;
 
             isReturn ? userInput : userInput.geocoded.origin.airportCode = outboundDepAirport;
            
+            userInput.geocoded.origin.airportName = `Airport: ${userInput.geocoded.origin.airportCode}`;
             //Origin Airport Name
             originCodeArray.map((item)=>{
                 item.code === outboundDepAirport ? userInput.geocoded.origin.airportName = item.name : item;
+                console.log(item, outboundDepAirport);
             });
-        
+
+
             isReturn ? destination = userInput.geocoded.origin.airportName : origin = userInput.geocoded.origin.airportName;
 
             //Origin Flight Number
@@ -273,7 +278,10 @@ function flightData(departureCity, arrivalCity,arr) {
 
             destinationCodeArray.map((item)=>{
                 item.code === outboundArrAirport ? userInput.geocoded.destination.airportName = item.name : item;
+                console.log(item, outboundArrAirport);
             });
+            
+            console.log('name', userInput.geocoded.destination.airportName);
 
             isReturn ? userInput : userInput.geocoded.destination.airportCode = outboundArrAirport;
 
@@ -649,8 +657,11 @@ function flightData(departureCity, arrivalCity,arr) {
         isReturn = false;
         origin = '';
         destination='';
-        flightDiv.innerHTML = '';        
+        flightDiv.innerHTML = ''; 
+             
         let userInput = {currentCity: '', destinationCity: '', departureDate: '', returnDate:'', geocoded: {origin: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}, destination: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}}};
+        userInput.geocoded.origin.airportName = 'Airport'; 
+        userInput.geocoded.destination.airportName = 'Airport';
     };
 
 //Button to Submit Search and Capture User Input
