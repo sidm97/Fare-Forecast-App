@@ -24,7 +24,9 @@ All of this information is parsed and assimilated into the HTML that shazna8181 
 ## Usage
 
 The user need simply input 4 details (marked) to obtain information. A city they're in currently, a city they'd like to visit, and dates they'd like to depart for and return from the city.
+
 ![screenshot-03](./assets/image/search-bar.png)
+
 To start using Fare Forecast:
 
 1. Navigate to Fare Forecast Website (https://sidm97.github.io/Fare-Forecast-App/).
