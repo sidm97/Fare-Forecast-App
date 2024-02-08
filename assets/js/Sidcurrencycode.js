@@ -18,6 +18,7 @@ $("#flight-btn").on("click", function () {
     if (destinationString === "" || originString === "") {
         return
     }
+    $( ".grid-container" ).removeClass( "hidden" )
     console.log("searching for: " + originString + " to " + destinationString);
     querydestinationURL = locationAPI + destinationString + locationAPIkey;
     queryoriginURL = locationAPI + originString + locationAPIkey;
@@ -50,11 +51,15 @@ $("#flight-btn").on("click", function () {
                 if (destinationCurrencyname === null) {
                     let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                     $("#currency_text").append(consolationString);
+                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                    $("#currency_text").css("font-size", "18px");
                     return;
                 }
                 if (destinationCurrencyname.indexOf(",") > -1) {
                     let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                     $("#currency_text").append(consolationString);
+                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                    $("#currency_text").css("font-size", "18px");
                     return;
                 }
                 let destinationcurrencyCode = final["ISO4217-currency_alphabetic_code"];
@@ -73,11 +78,15 @@ $("#flight-btn").on("click", function () {
                         if (originCurrencyname === null) {
                             let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                             $("#currency_text").append(consolationString);
+                            $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                            $("#currency_text").css("font-size", "18px");
                             return;
                         }
                         if (originCurrencyname.indexOf(",") > -1) {
                             let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                             $("#currency_text").append(consolationString);
+                            $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                            $("#currency_text").css("font-size", "18px");
                             return;
                         }
                         let origincurrencyCode = final["ISO4217-currency_alphabetic_code"];
@@ -92,6 +101,8 @@ $("#flight-btn").on("click", function () {
                     let conversionRate = data.conversion_rate;
                     let createdString = ("The current exchange rate from " + originCurrencyname + " (" + origincurrencyCode + ") to " + destinationCurrencyname + " (" + destinationcurrencyCode + ") is " + conversionRate);
                     $("#currency_text").append(createdString);
+                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                    $("#currency_text").css("font-size", "18px");
                     console.log(createdString);
                 })
             })

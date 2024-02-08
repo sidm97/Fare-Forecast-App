@@ -39,19 +39,13 @@ p {
 }
 
 .flightSearch {
-    height: 500px;
+    height: 800px;
     width: 100%;
     margin-bottom: 15px;
-    background-image: url("../image/banner1.jpg");
+    background-image: url("../image/banner1.png");
     display: block;
     background-size: cover;
     background-position: center;
-}
-.mb-3{
-    position:absolute;
-    margin-left: 20%;
-    margin-top: 10%;
-    width: 900px;
 }
 
 .grid-container{
@@ -85,3 +79,14 @@ p {
 }
     
 
+.hidden {
+display: none;
+}
+
+#currency-title {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    border-bottom: 1px #dc7769 dashed;
+    color: rgb(255, 255, 255, 0.7);
+}
