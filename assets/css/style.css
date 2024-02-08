@@ -13,8 +13,10 @@
 body {
     background-color: #446372;
     font-family: 'Manjari', sans-serif;
+    color: white;
     
 }
+
 
 ::placeholder {
     color: #dc7769;
@@ -69,8 +71,31 @@ p {
 
     background-color: #446372;
     border: none;
-
+    color: rgb(255, 255, 255, 0.7);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
 }
+
+.card button {
+    border:none;
+    border-radius: 15px;
+    outline: none;
+    color: white;
+    background-color: #dc7769;
+}
+
+.card button:hover {
+    background-color: #26313e;
+}
+
+.card p {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+
 
 
 .footer h2 {
