@@ -68,50 +68,11 @@ p {
     color: rgb(255, 255, 255, 0.7);
     font-size: 1rem;
     display: flex;
-    align-items: center;
 }
 
-<<<<<<< HEAD
 footer{
     border-top: 1px #dc7769 dashed;
     margin: 20px;
-=======
-.card button {
-    border:none;
-    border-radius: 15px;
-    outline: none;
-    color: white;
-    background-color: #dc7769;
-}
-
-.card button:hover {
-    background-color: #26313e;
-}
-
-.card p {
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-}
-
-#currency-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-#currency-box {
-    background-color: rgb(29, 45, 62, 0.6);
-    padding: 10px;
-    border-radius: 10px;
-    width:95%;
-    height: 30vh;
-}
-
-#currency-display {
-    font-size: 6.9vh;
-    text-align:center;
->>>>>>> 3c1df6bcedd3848cf19682bd879bd33cf9504df1
 }
 
 .footer h2 {

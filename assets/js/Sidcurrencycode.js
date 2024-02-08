@@ -12,7 +12,8 @@ let querycurrencyURL;
 // user submits city --> geocoding API takes the city and returns a country code --> another database, link below, takes country code and returns a currency code --> currency exchange API takes this currency code to return conversion ratez
 $("#flight-btn").on("click", function () {
     event.preventDefault();
-    $("#currency_text").empty();
+    // $("#currency_exchange").empty();
+    // $("#Weather-card").empty();
     destinationString = $("#destination-input").val().toUpperCase();
     originString =  $("#origin-input").val().toUpperCase();
     if (destinationString === "" || originString === "") {
