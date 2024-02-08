@@ -41,19 +41,25 @@ p {
 }
 
 .flightSearch {
-    height: 800px;
+    height: 700px;
     width: 100%;
     margin-bottom: 15px;
     background-image: url("../image/banner1.png");
-    display: block;
+    display: grid;
     background-size: cover;
     background-position: center;
+}
+
+#search-form{
+    margin-left: 15%;
+    margin-top: 10%;
 }
 
 .grid-container{
     display: grid;
     grid-template-columns: 1fr 0.75fr 1fr;
     grid-template-rows: 300px;
+    height: 800px;
     gap: 10px;  
 }
 
@@ -100,6 +106,12 @@ display: none;
 
 
 #weather-title {
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+    border-bottom: 1px #dc7769 dashed;
+    color: rgb(255, 255, 255, 0.7);
+}
+#flight-title {
     padding-bottom: 2px;
     margin-bottom: 10px;
     border-bottom: 1px #dc7769 dashed;
