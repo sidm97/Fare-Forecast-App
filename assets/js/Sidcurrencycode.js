@@ -10,16 +10,14 @@ let queryoriginURL
 let querycurrencyURL;
 
 // user submits city --> geocoding API takes the city and returns a country code --> another database, link below, takes country code and returns a currency code --> currency exchange API takes this currency code to return conversion ratez
-$("#flight-btn").on("click", function () {
+$("#flight-btn").on("click", function (event) {
     event.preventDefault();
-    // $("#currency_exchange").empty();
-    // $("#Weather-card").empty();
+    $("#currency_text").empty();
     destinationString = $("#destination-input").val().toUpperCase();
     originString =  $("#origin-input").val().toUpperCase();
     if (destinationString === "" || originString === "") {
         return
     }
-    $( ".grid-container" ).removeClass( "hidden" )
     console.log("searching for: " + originString + " to " + destinationString);
     querydestinationURL = locationAPI + destinationString + locationAPIkey;
     queryoriginURL = locationAPI + originString + locationAPIkey;
@@ -52,15 +50,11 @@ $("#flight-btn").on("click", function () {
                 if (destinationCurrencyname === null) {
                     let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                     $("#currency_text").append(consolationString);
-                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
-                    $("#currency_text").css("font-size", "16px");
                     return;
                 }
                 if (destinationCurrencyname.indexOf(",") > -1) {
                     let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                     $("#currency_text").append(consolationString);
-                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
-                    $("#currency_text").css("font-size", "16px");
                     return;
                 }
                 let destinationcurrencyCode = final["ISO4217-currency_alphabetic_code"];
@@ -79,15 +73,11 @@ $("#flight-btn").on("click", function () {
                         if (originCurrencyname === null) {
                             let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                             $("#currency_text").append(consolationString);
-                            $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
-                            $("#currency_text").css("font-size", "16px");
                             return;
                         }
                         if (originCurrencyname.indexOf(",") > -1) {
                             let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
                             $("#currency_text").append(consolationString);
-                            $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
-                            $("#currency_text").css("font-size", "16px");
                             return;
                         }
                         let origincurrencyCode = final["ISO4217-currency_alphabetic_code"];
@@ -100,10 +90,10 @@ $("#flight-btn").on("click", function () {
                 .then(function (response) {return response.json();})
                 .then(function (data) {
                     let conversionRate = data.conversion_rate;
-                    let createdString = ("The current exchange rate from " + originCurrencyname + " (" + origincurrencyCode + ") to " + destinationCurrencyname + " (" + destinationcurrencyCode + ") is " + conversionRate);
+                    // let createdString = ("The current exchange rate from " + originCurrencyname + " (" + origincurrencyCode + ") to " + destinationCurrencyname + " (" + destinationcurrencyCode + ") is " + conversionRate);
+                    let createdString = ("The current exchange rate from " + originCurrencyname + " (" + origincurrencyCode + ") to " + destinationCurrencyname + " (" + destinationcurrencyCode + ") is :");
                     $("#currency_text").append(createdString);
-                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
-                    $("#currency_text").css("font-size", "16px");
+                    $("#currency-display").html(conversionRate);
                     console.log(createdString);
                 })
             })
