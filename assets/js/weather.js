@@ -30,10 +30,6 @@ $(document).ready(function () {
 
   function displayWeather(data) {
     const weatherDisplay = $("#Weather");
-    $("#Weather").css("color", "rgb(255, 255, 255, 0.7)");
-    $("#Weather .h2").css("color", "black");
-    $("#Weather").css("padding-left", "30px");
-    $("#weather-title").append(`<h2>${data.name}</h2>`)
     if (data.cod !== 200) {
       weatherDisplay.html(`<p>City not found. Please try again.</p>`);
       return;
@@ -46,14 +42,70 @@ $(document).ready(function () {
 
     const weatherHtml = `
           <div class="col-12">
+              <h2>${data.name}</h2>
               <p>Local Time: ${timeString}</p>
-              <img src="http://openweathermap.org/img/wn/${data.weather[0].icon}.png" alt="${data.weather[0].description}">
+              <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}.png" alt="${data.weather[0].description}">
               <p>Temperature: ${data.main.temp} °C</p>
               <p>Weather: ${data.weather[0].main}</p>
               <p>Wind Speed: ${data.wind.speed} KPH</p>
               <p>Humidity: ${data.main.humidity}%</p>
+              
           </div>
       `;
+              // <button class="btn btn-primary" onclick="addToFavorites('${data.name}')">Add to Favorites</button>
     weatherDisplay.html(weatherHtml);
   }
+
+  function displayForecast(data) {
+    const forecastDisplay = $("#forecast");
+    if (data.cod !== "200") {
+      forecastDisplay.html(`<p>Forecast not available.</p>`);
+      return;
+    }
+    let forecastHtml = `<div class="col-12"><h3>5-Day Forecast:</h3></div>`;
+    data.list.forEach((forecast, index) => {
+      if (index % 8 === 0) {
+        forecastHtml += `
+                    <div class="col-md-2 forecast-card">
+                        <h5>${new Date(
+                          forecast.dt_txt
+                        ).toLocaleDateString()}</h5>
+                        <img src="https://openweathermap.org/img/wn/${
+                          forecast.weather[0].icon
+                        }.png" alt="Weather icon">
+                        <p>Temp: ${forecast.main.temp}°C</p>
+                        <p>Wind: ${forecast.wind.speed} KPH</p>
+                        <p>Humidity: ${forecast.main.humidity}%</p>
+                    </div>
+                `;
+      }
+    });
+    forecastDisplay.html(forecastHtml);
+  }
+
+  window.addToFavorites = function (city) {
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    if (!favorites.includes(city)) {
+      favorites.push(city);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      updateFavoritesList();
+    }
+  };
+
+  function updateFavoritesList() {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const favoritesList = $("#favorites-list");
+    favoritesList.empty();
+    favorites.forEach((city) => {
+      const cityBtn = $(
+        `<button class="list-group-item list-group-item-action">${city}</button>`
+      ).click(() => {
+        getWeather(city, apiKey);
+        getForecast(city, apiKey);
+      });
+      favoritesList.append(cityBtn);
+    });
+  }
+
+  updateFavoritesList();
 });

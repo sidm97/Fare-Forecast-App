@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="./assets/css/style.css"/>
     <!-- <link rel="stylesheet" href="./assets/css/weather.css"/> -->
     <link rel="stylesheet" href="./assets/css/flight.css"/>
-    <!-- <link rel="stylesheet" href="./assets/css/weather.css"/> -->
     <title>Fare Forecast</title>
 </head>
 <body>
@@ -20,46 +19,66 @@
 
         <h1><span class="fare"><span class="f">f</span> a r e </span> <span class="forecast"><span class="f">f</span> o r e c a s t</span></h1>
     </header> 
-    <div class="flightSearch">
+    <div class="flightSearch"></div>
     <div id= "user-input">
         <form id="search-form" class="form">
-                <div class="input-group">
-                 <input class="form-input" type="text" id="origin-input" placeholder=" Origin City"
+            <div class="input-group">
+                <input class="form-input" type="text" id="origin-input" placeholder=" Origin City"
                   aria-labelledby="form-heading" />
-                  <input class="form-input" type="text" id="destination-input" placeholder=" Destination City"
+                <input class="form-input" type="text" id="destination-input" placeholder=" Destination City"
                   aria-labelledby="form-heading" />
-                  <input type="text" name="" id="departure-date" placeholder=" Departure Date"/>
-                  <input type="text" name="" id="return-date" placeholder=" Return Date" />
-                    <div class="input-group-append">
+                <input type="text" name="" id="departure-date" placeholder=" Departure Date"/>
+                <input type="text" name="" id="return-date" placeholder=" Return Date" />
+                <div class="input-group-button">
                         <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2">Find Flights</button> -->
-                        <button type="submit" class="btn search-button" aria-label="submit search" id="flight-btn">Find Flights! 
-                        </button>
-                    </div> 
+                        <button type="submit" class="btn search-button" aria-label="submit search" id="flight-btn">Find Flights!</button>
+                        <button id="favourites-btn" class="btn btn-primary">Add to Favourites</button>
                 </div>
+            </div> 
+                <!-- </div> -->
         </form>    
     </div>
-    </div>
-    <div class="grid-container hidden">
+    <div class="grid-container">
         
         <div id="flight" class="first card"> 
-            <h2 id="flight-title">Flight Details</h2>
             <div id="spinner">
                 <div class="spinner-grow text-light" role="status" aria-label="loading">
                 </div>      
             </div>
             <div id="error-display"></div>
             <div id="flight-info">
+
+            </div>
+           
+        </div>
+       
+        <div id="weather-card" class="first card">
+            <!-- <div id="Weather" class="first card">         -->
+            <div id="Weather">        
+                <!-- <h2>Weather Dashboard</h2>
+                    <p>
+                        Weather Forecast.
+                    </p> -->
+            </div>
+
+        </div>
+        <div id="currency_exchange" class="first card"> 
+            <div id="currency-container">
+                <h2>Currency Exchange Rates</h2>
+                <div id="currency-box">     
+                    <p id="currency_text"></p>
+                    <div id="currency-display">
+
+                    </div>
+                </div>  
+            </div>
+            <div id="favourites"></div>
+            <div id="clear-section">
+                <div id="clear"></div>
             </div>
         </div>
-        <div id="Weather-card" class="first card">
-            <h2 id="weather-title"></h2>
-            <div id="Weather"></div>
-        </div>
-        <div id="currency_exchange" class="first card">        
-            <h2 id="currency-title">Currency Exchange Rates</h2>
-            <p id="currency_text"></p>
-        </div>
     </div> 
+                    
     <footer class="class=container-fluid text-center text-white">
             <p> &copy; 2024 Group project 01 </p>
             <p> Legal Stuff | Privacy | Security</p>
@@ -71,6 +90,7 @@
     <script src="./assets/js/Sidcurrencycode.js"></script>
     <script src="./assets/js/nicole-flight-api.js"></script>
     <script src="./assets/js/weather.js"></script>
+    <script src="./assets/js/favourites.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>
