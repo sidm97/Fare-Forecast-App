@@ -1,5 +1,5 @@
-const apiKey = '65460f2d682dbe6e454f0b9ada6fd285';
-const token = '9gkz3eee56n6thj7u6jxw35d';
+const austen = '65460f2d682dbe6e454f0b9ada6fd285';
+const gundam = '754qvh7p56n2636z6u8dt2qc';
 //HTML Elements
 const flightDiv = document.getElementById('flight-info');
 const flightBtn = document.getElementById('flight-btn');
@@ -8,6 +8,8 @@ const destinationInput = document.getElementById('destination-input');
 const departureDate = document.getElementById('departure-date');
 const returnDate = document.getElementById('return-date');
 let spinner = document.getElementById('spinner');
+const currency = document.getElementById('currency-display');
+const currencyBox = document.getElementById('currency-box');
 
 //Datepicker
 $('#departure-date').datepicker({
@@ -63,7 +65,7 @@ let isReturn = false;
 const errorDisplay = document.getElementById('error-display');
 const errorDiv = document.createElement('div');
 errorDiv.setAttribute('id', 'error-message');
-const errorMsg = `There is an error with your search. <br/>Please check your Internet connection`;
+const errorMsg = `There is an error with your search. <br/>Please try again.`;
 const noFlights = 'We were unable to find flights for your chosen dates and cities. Please adjust your search and try again.'
 
 
@@ -74,8 +76,8 @@ function queryInfo (input) {
     destinationArray=[];
     const cityQuery = [userQuery.currentCity, userQuery.destinationCity];
 
-    const originCode = `https://api.openweathermap.org/geo/1.0/direct?q=${cityQuery[0]}&limit=5&appid=${apiKey}`;
-    const destinationCode = `https://api.openweathermap.org/geo/1.0/direct?q=${cityQuery[1]}&limit=5&appid=${apiKey}`;
+    const originCode = `https://api.openweathermap.org/geo/1.0/direct?q=${cityQuery[0]}&limit=5&appid=${austen}`;
+    const destinationCode = `https://api.openweathermap.org/geo/1.0/direct?q=${cityQuery[1]}&limit=5&appid=${austen}`;
     Promise.all([
         fetch(originCode).then((response) => {return response.json()}).then((data1) => {  
             const city = data1[0];
@@ -122,7 +124,7 @@ function nearestAirport() {
     // Fetch requests
     Promise.all([
         fetch(originQuery , {
-            headers: {Authorization: `Bearer ${token}`}
+            headers: {Authorization: `Bearer ${gundam}`}
         }).then((response) => {return response.json()}).then((data1) => {  
                 console.log(data1.NearestAirportResource.Airports.Airport);
                 const code = data1.NearestAirportResource.Airports.Airport[0].CityCode;
@@ -145,9 +147,8 @@ function nearestAirport() {
             errorMessage (errorMsg);
         }),
         fetch(destinationQuery , {
-            headers: {Authorization: `Bearer ${token}`}
+            headers: {Authorization: `Bearer ${gundam}`}
         }).then((response) => {return response.json()}).then((data2) => {  
-            // console.log(data2.NearestAirportResource.Airports.Airport);
                 const code = data2.NearestAirportResource.Airports.Airport[0].CityCode;
                 userInput.geocoded.destination.cityCode = code;
                 let airportArray = data2.NearestAirportResource.Airports.Airport;
@@ -157,8 +158,6 @@ function nearestAirport() {
                     let airportItem = {code: airportCode, name: airportName };
                     destinationCodeArray.push(airportItem);
                 });
-                // console.log('input1', userInput.geocoded.destination.cityCode);
-                // console.log(data2.NearestAirportResource.Airports.Airport[0].Names.Name[0].$);
                 return code;
         }).then((code2)=>{
                 code2 ? outbound(code2) : errorCode(userDestination);
@@ -183,7 +182,6 @@ function nearestAirport() {
     function inbound () {
         query = `https://api.lufthansa.com/v1/operations/schedules/${userInput.geocoded.destination.airportCode}/${userInput.geocoded.origin.airportCode}/${userInput.returnDate}?`; 
         isReturn = true;
-        // console.log('inbound');
         flightData(destination, origin, flightInfo);        
     };
 
@@ -191,14 +189,13 @@ function nearestAirport() {
 function flightData(departureCity, arrivalCity,arr) {  
     //Fetch request
         fetch(query , {
-            headers: {Authorization: `Bearer ${token}`}
+            headers: {Authorization: `Bearer ${gundam}`}
         })
         .then((response) => {
             return response.json();
         })
         .then((data) => {  
             const flights = data?.ScheduleResource.Schedule;
-            console.log(flights);
 
             //Check Whether or Not Flight Is Direct
             isDirect = data?.ScheduleResource.Schedule[0].Flight.Departure;
@@ -209,17 +206,21 @@ function flightData(departureCity, arrivalCity,arr) {
             //Flight Information
             //Origin City
             origin = departureCity;
-           
+            // userInput.geocoded.origin.airportName = 'Airport';
+            // userInput.geocoded.destination.airportName = 'Airport';
+
             //Flight Origin Airport
             const outboundDepAirport = flight?.Departure.AirportCode;
 
             isReturn ? userInput : userInput.geocoded.origin.airportCode = outboundDepAirport;
            
+            userInput.geocoded.origin.airportName = `Airport: ${userInput.geocoded.origin.airportCode}`;
             //Origin Airport Name
             originCodeArray.map((item)=>{
                 item.code === outboundDepAirport ? userInput.geocoded.origin.airportName = item.name : item;
             });
-        
+
+
             isReturn ? destination = userInput.geocoded.origin.airportName : origin = userInput.geocoded.origin.airportName;
 
             //Origin Flight Number
@@ -274,7 +275,7 @@ function flightData(departureCity, arrivalCity,arr) {
             destinationCodeArray.map((item)=>{
                 item.code === outboundArrAirport ? userInput.geocoded.destination.airportName = item.name : item;
             });
-
+            
             isReturn ? userInput : userInput.geocoded.destination.airportCode = outboundArrAirport;
 
             //Flight Arrival Airport Name
@@ -329,9 +330,7 @@ function flightData(departureCity, arrivalCity,arr) {
         } else {
             returnArray = [departure, transferArr, transferDep, arrival];
             entireArray = [outboundArray, returnArray];
-            console.log('return', returnArray);
             renderData(entireArray);
-            console.log('entire',entireArray);
         }
     };
 
@@ -362,7 +361,7 @@ function flightData(departureCity, arrivalCity,arr) {
         
         //Outbound Departure
         const departureDivO = document.createElement('div')
-        departureDivO.setAttribute('id', `o-departure-div-${i+1}`);
+        departureDivO.setAttribute('class', `departure-div-o`);
         const departureTextboxO = document.createElement('div')
         departureTextboxO.setAttribute('id', `o-departure-textbox-${i+1}`);
         
@@ -373,7 +372,7 @@ function flightData(departureCity, arrivalCity,arr) {
         
         //Outbound Arrival
         const arrivalDivO = document.createElement('div')
-        arrivalDivO.setAttribute('id', `o-arrival-div-${i+1}`);
+        arrivalDivO.setAttribute('class', `arrival-div-o`);
         const arrivalTextboxO = document.createElement('div')
         arrivalTextboxO.setAttribute('id', `o-arrival-div-${i+1}`);
         
@@ -385,7 +384,7 @@ function flightData(departureCity, arrivalCity,arr) {
         
         //Return Departure
         const departureDivR = document.createElement('div')
-        departureDivR.setAttribute('id', `r-departure-div-${i+1}`);
+        departureDivR.setAttribute('class', `departure-div-r`);
         const departureTextboxR = document.createElement('div')
         departureTextboxR.setAttribute('id', `r-departure-textbox-${i+1}`);
         
@@ -396,7 +395,7 @@ function flightData(departureCity, arrivalCity,arr) {
         
         //Return Arrival
         const arrivalDivR = document.createElement('div')
-        arrivalDivR.setAttribute('id', `r-arrival-div-${i+1}`);
+        arrivalDivR.setAttribute('class', `arrival-div-r`);
         const arrivalTextboxR = document.createElement('div')
         arrivalTextboxR.setAttribute('id', `r-arrival-div-${i+1}`);
 
@@ -554,7 +553,6 @@ function flightData(departureCity, arrivalCity,arr) {
                 
                 if(moreInfoDiv.style.display==='block') {
                     $('.more-div').slideUp();
-                    // moreInfoDiv.style.display='none';
                     arrivalTextboxO.innerHTML = outArrText;
                     departureTextboxR.innerHTML = retDepText;
                     moreBtn.innerHTML = 'See more';
@@ -623,6 +621,8 @@ function flightData(departureCity, arrivalCity,arr) {
         errorMessage(notFound);
     }
 
+    //Create Airport Not Found Error Message
+
     function errorCode(place){
         let location = place;
         const notFound = `We couldn't find any airports near ${location}. Try again with a different city.`;
@@ -649,22 +649,32 @@ function flightData(departureCity, arrivalCity,arr) {
         isReturn = false;
         origin = '';
         destination='';
-        flightDiv.innerHTML = '';        
+        flightDiv.innerHTML = ''; 
+             
         let userInput = {currentCity: '', destinationCity: '', departureDate: '', returnDate:'', geocoded: {origin: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}, destination: {lat: '', lon: '', cityCode: '', airportCode: '', airportName: ''}}};
+        userInput.geocoded.origin.airportName = 'Airport'; 
+        userInput.geocoded.destination.airportName = 'Airport';
     };
 
 //Button to Submit Search and Capture User Input
     flightBtn.addEventListener('click', (e)=>{
         e.preventDefault();
         initialise();
+        currency.innerHTML='';
+        $('#currency-container').fadeOut();
+        $('#currency-container').fadeIn(1000);
+        $('#Weather').fadeOut();
+        $('#Weather').fadeIn(1000);
         userOrigin = originInput.value;
         userDestination = destinationInput.value;
         let originSearch = originInput.value.toLowerCase().trim();
         let destinationSearch = destinationInput.value.toLowerCase().trim();
         let depDate = departureDate.value;
         let retDate = returnDate.value;
-        userInput.currentCity = originSearch.split(' ').join('');
-        userInput.destinationCity = destinationSearch.split(' ').join('');
+        // userInput.currentCity = originSearch.split(' ').join('');
+        // userInput.destinationCity = destinationSearch.split(' ').join('');
+        userInput.currentCity = originSearch;
+        userInput.destinationCity = destinationSearch;
         userInput.departureDate = departureDate.value.split('-').reverse().join('-');
         userInput.returnDate = returnDate.value.split('-').reverse().join('-');
         
