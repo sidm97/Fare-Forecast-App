@@ -66,6 +66,7 @@ const errorDisplay = document.getElementById('error-display');
 const errorDiv = document.createElement('div');
 errorDiv.setAttribute('id', 'error-message');
 const errorMsg = `There is an error with your search. <br/>Please try again.`;
+const errorMsg = `There is an error with your search. <br/>Please try again.`;
 const noFlights = 'We were unable to find flights for your chosen dates and cities. Please adjust your search and try again.'
 
 
@@ -218,6 +219,7 @@ function flightData(departureCity, arrivalCity,arr) {
             //Origin Airport Name
             originCodeArray.map((item)=>{
                 item.code === outboundDepAirport ? userInput.geocoded.origin.airportName = item.name : item;
+                console.log(item, outboundDepAirport);
             });
 
 
@@ -274,6 +276,7 @@ function flightData(departureCity, arrivalCity,arr) {
 
             destinationCodeArray.map((item)=>{
                 item.code === outboundArrAirport ? userInput.geocoded.destination.airportName = item.name : item;
+                console.log(item, outboundArrAirport);
             });
             
             isReturn ? userInput : userInput.geocoded.destination.airportCode = outboundArrAirport;

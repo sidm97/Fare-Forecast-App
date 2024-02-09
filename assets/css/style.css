@@ -13,8 +13,10 @@
 body {
     background-color: #446372;
     font-family: 'Manjari', sans-serif;
+    color: white;
     
 }
+
 
 ::placeholder {
     color: #dc7769;
@@ -31,6 +33,7 @@ body {
 .header h1 {
     display: inline-block;
     font-size: 48px;
+    
 }
 
 p {
@@ -38,25 +41,25 @@ p {
 }
 
 .flightSearch {
-    height: 500px;
+    height: 700px;
     width: 100%;
     margin-bottom: 15px;
-    background-image: url("../image/banner1.jpg");
-    display: block;
+    background-image: url("../image/banner1.png");
+    display: grid;
     background-size: cover;
     background-position: center;
 }
-.mb-3{
-    position:absolute;
-    margin-left: 30%;
+
+#search-form{
+    margin-left: 15%;
     margin-top: 10%;
-    width: 600px;
 }
 
 .grid-container{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 500px;
+    grid-template-columns: 1fr 0.75fr 1fr;
+    grid-template-rows: 300px;
+    height: 800px;
     gap: 10px;  
 }
 
@@ -65,15 +68,52 @@ p {
 }
 
 .card {
+
     background-color: #446372;
     border: none;
+    color: rgb(255, 255, 255, 0.7);
+    font-size: 1rem;
+    display: flex;
+}
+
+footer{
+    margin: 20px;
 }
 
 .footer h2 {
-    font-size: 10px;
+    font-size: 8px;
     clear: both;
 }
 
+.input-group{
+    padding: 0px 100px
+    
+
+}
+    
+
+.hidden {
+display: none;
+}
+
+#currency-title {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    border-bottom: 1px #dc7769 dashed;
+    color: rgb(255, 255, 255, 0.7);
+}
 
 
-
+#weather-title {
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+    border-bottom: 1px #dc7769 dashed;
+    color: rgb(255, 255, 255, 0.7);
+}
+#flight-title {
+    padding-bottom: 2px;
+    margin-bottom: 10px;
+    border-bottom: 1px #dc7769 dashed;
+    color: rgb(255, 255, 255, 0.7);
+}

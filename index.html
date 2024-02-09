@@ -9,7 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@400;500;600&family=Manjari:wght@100;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="./assets/css/style.css"/>
+    <!-- <link rel="stylesheet" href="./assets/css/weather.css"/> -->
     <link rel="stylesheet" href="./assets/css/flight.css"/>
+    <!-- <link rel="stylesheet" href="./assets/css/weather.css"/> -->
     <title>Fare Forecast</title>
 </head>
 <body>
@@ -19,12 +21,7 @@
         <h1><span class="fare"><span class="f">f</span> a r e </span> <span class="forecast"><span class="f">f</span> o r e c a s t</span></h1>
     </header> 
     <div class="flightSearch">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Where would you like to go?" aria-label="Recipient's username" aria-describedby="button-addon2" id="city">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">GO</button>
-          </div>
-    </div>
-    <div id="user-input">
+    <div id= "user-input">
         <form id="search-form" class="form">
                 <div class="input-group">
                  <input class="form-input" type="text" id="origin-input" placeholder=" Origin City"
@@ -34,43 +31,36 @@
                   <input type="text" name="" id="departure-date" placeholder=" Departure Date"/>
                   <input type="text" name="" id="return-date" placeholder=" Return Date" />
                     <div class="input-group-append">
-                        <button type="submit" class="btn search-button" aria-label="submit search" id="flight-btn">Find Flights!
+                        <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2">Find Flights</button> -->
+                        <button type="submit" class="btn search-button" aria-label="submit search" id="flight-btn">Find Flights! 
                         </button>
                     </div> 
                 </div>
         </form>    
     </div>
-   
-    <div class="grid-container">
+    </div>
+    <div class="grid-container hidden">
         
         <div id="flight" class="first card"> 
+            <h2 id="flight-title">Flight Details</h2>
             <div id="spinner">
                 <div class="spinner-grow text-light" role="status" aria-label="loading">
                 </div>      
             </div>
             <div id="error-display"></div>
             <div id="flight-info">
-
             </div>
-           
         </div>
-        
-        <div id="Weather" class="first card">        
-            <h2>Weather Dashboard</h2>
-                <p>
-                    Weather Forecast.
-                </p>
+        <div id="Weather-card" class="first card">
+            <h2 id="weather-title"></h2>
+            <div id="Weather"></div>
         </div>
         <div id="currency_exchange" class="first card">        
-            <h2>Currency Exchange</h2>
-                <p>
-                    Currency Exchange Rate for the Destination.
-                </p>
+            <h2 id="currency-title">Currency Exchange Rates</h2>
+            <p id="currency_text"></p>
         </div>
     </div> 
-                    
     <footer class="class=container-fluid text-center text-white">
-            <h2>The TEAM</h2>
             <p> &copy; 2024 Group project 01 </p>
             <p> Legal Stuff | Privacy | Security</p>
      </footer>
@@ -80,6 +70,7 @@
     <script src ="./assets/js/bootstrap-datepicker.min.js"></script>
     <script src="./assets/js/Sidcurrencycode.js"></script>
     <script src="./assets/js/nicole-flight-api.js"></script>
+    <script src="./assets/js/weather.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
 </html>

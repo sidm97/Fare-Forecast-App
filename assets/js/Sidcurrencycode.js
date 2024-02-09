@@ -1,57 +1,116 @@
 // Sid's currency exchange code
-const currencyAPI = 'https://v6.exchangerate-api.com/v6/cce8439a497e07a97ad9f20f/pair/gbp/';
-const locationAPI = "http://api.openweathermap.org/geo/1.0/direct?q=";
+const currencyAPI = 'https://v6.exchangerate-api.com/v6/cce8439a497e07a97ad9f20f/pair/';
+const locationAPI = "https://api.openweathermap.org/geo/1.0/direct?q=";
 const locationAPIkey = "&appid=7029ec148d2666f47569499650a8ea2e";
 const databaseLink = "https://pkgstore.datahub.io/core/country-codes/country-codes_json/data/616b1fb83cbfd4eb6d9e7d52924bb00a/country-codes_json.json";
-let searchString;
-let querylocationURL;
+let destinationString;
+let originString;
+let querydestinationURL;
+let queryoriginURL
 let querycurrencyURL;
 
 // user submits city --> geocoding API takes the city and returns a country code --> another database, link below, takes country code and returns a currency code --> currency exchange API takes this currency code to return conversion ratez
-$("#button-addon2").on("click", function () {
-    searchString = $("#city").val().toUpperCase();
-    console.log("searching for: " + searchString);
-    querylocationURL = locationAPI + searchString + locationAPIkey;
-    console.log("URL for weather API is : " + querylocationURL);
+$("#flight-btn").on("click", function () {
+    event.preventDefault();
+    // $("#currency_exchange").empty();
+    // $("#Weather-card").empty();
+    destinationString = $("#destination-input").val().toUpperCase();
+    originString =  $("#origin-input").val().toUpperCase();
+    if (destinationString === "" || originString === "") {
+        return
+    }
+    $( ".grid-container" ).removeClass( "hidden" )
+    console.log("searching for: " + originString + " to " + destinationString);
+    querydestinationURL = locationAPI + destinationString + locationAPIkey;
+    queryoriginURL = locationAPI + originString + locationAPIkey;
+    console.log("URL for weather API for destination is : " + querydestinationURL);
+    console.log("URL for weather API for origin is : " + queryoriginURL);
+
     // below is geocoding API code
-    fetch(querylocationURL)
+    fetch(querydestinationURL)
     .then(function (response) {return response.json();})
     .then(function (data) {
         console.log(data[0]);
-        let locationCountry = data[0].country
-        console.log("Country code for city is : " + locationCountry);
+        let destinationCountry = data[0].country
+        console.log("Country code for destination city is : " + destinationCountry);
+        fetch(queryoriginURL)
+        .then(function (response) {return response.json();})
+        .then(function (data) {
+            console.log(data[0]);
+            let originCountry = data[0].country
+            console.log("Country code for origin city is : " + originCountry);
+    
         // below is database to convert country code to currency code
         fetch(databaseLink)
         .then(function (response) {return response.json();}).then(function(data){
-            console.log(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry));
-            return(data.find(item => item['ISO3166-1-Alpha-2'] === locationCountry)); ;})
+            console.log(data.find(item => item['ISO3166-1-Alpha-2'] === destinationCountry));
+            return(data.find(item => item['ISO3166-1-Alpha-2'] === destinationCountry)); ;})
             .then(function (final) {
-                let currencyName = final["ISO4217-currency_name"];
-                console.log("Currency name is : " + currencyName);
-                console.log(typeof(currencyName));
+                let destinationCurrencyname = final["ISO4217-currency_name"];
+                console.log("Destination currency name is : " + destinationCurrencyname);
                 // Here are 2 if statements for the undesirable possibilities present in the country database
-                if (currencyName === null) {
-                    console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
+                if (destinationCurrencyname === null) {
+                    let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
+                    $("#currency_text").append(consolationString);
+                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                    $("#currency_text").css("font-size", "16px");
                     return;
                 }
-                if (currencyName.indexOf(",") > -1) {
-                    console.log("We're sorry, we don't seem to have data on the currency exchange rate for your destination");
+                if (destinationCurrencyname.indexOf(",") > -1) {
+                    let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
+                    $("#currency_text").append(consolationString);
+                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                    $("#currency_text").css("font-size", "16px");
                     return;
                 }
-                let currencyCode = final["ISO4217-currency_alphabetic_code"];
-                console.log("Currency code is : " + currencyCode);
-                let querycurrencyURL = currencyAPI + currencyCode;
-                console.log("Final URL for exchange rate search is : " + querycurrencyURL);
+                let destinationcurrencyCode = final["ISO4217-currency_alphabetic_code"];
+                console.log("Destination currency code is : " + destinationcurrencyCode);
+                // let querydestinationcurrencyURL = currencyAPI + destinationcurrencyCode;
+                // console.log("Final URL for destination exchange rate search is : " + querydestinationcurrencyURL);
+
+                fetch(databaseLink)
+                .then(function (response) {return response.json();}).then(function(data){
+                    console.log(data.find(item => item['ISO3166-1-Alpha-2'] === originCountry));
+                    return(data.find(item => item['ISO3166-1-Alpha-2'] === originCountry)); ;})
+                    .then(function (final) {
+                        let originCurrencyname = final["ISO4217-currency_name"];
+                        console.log("Origin currency name is : " + originCurrencyname);
+                        // Here are 2 if statements for the undesirable possibilities present in the country database
+                        if (originCurrencyname === null) {
+                            let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
+                            $("#currency_text").append(consolationString);
+                            $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                            $("#currency_text").css("font-size", "16px");
+                            return;
+                        }
+                        if (originCurrencyname.indexOf(",") > -1) {
+                            let consolationString = "We're sorry, we don't seem to have data on the currency exchange rate for your destination";
+                            $("#currency_text").append(consolationString);
+                            $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                            $("#currency_text").css("font-size", "16px");
+                            return;
+                        }
+                        let origincurrencyCode = final["ISO4217-currency_alphabetic_code"];
+                        console.log("Origin currency code is : " + origincurrencyCode);
+                        let querycurrencyURL = currencyAPI + origincurrencyCode + "/" + destinationcurrencyCode;
+                        console.log("Final URL for exchange rate search is : " + querycurrencyURL);
+        
                 // below is exchange API to convert currency code to exchange rate
                 fetch(querycurrencyURL)
                 .then(function (response) {return response.json();})
                 .then(function (data) {
                     let conversionRate = data.conversion_rate;
-                    let createdString = ("The current exchange rate from Pound Sterling (GBP) to " + currencyName + " (" + currencyCode + ") is " + conversionRate);
+                    let createdString = ("The current exchange rate from " + originCurrencyname + " (" + origincurrencyCode + ") to " + destinationCurrencyname + " (" + destinationcurrencyCode + ") is " + conversionRate);
+                    $("#currency_text").append(createdString);
+                    $("#currency_text").css("color", "rgb(255, 255, 255, 0.7)");
+                    $("#currency_text").css("font-size", "16px");
                     console.log(createdString);
                 })
             })
         })
-        
-        $(".form-control").val("");
+    })
+    })
+        // $("#destination-input").val("");
+        // $("#origin-input").val("");
+
     })
