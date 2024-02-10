@@ -1,5 +1,5 @@
 const austen = '65460f2d682dbe6e454f0b9ada6fd285';
-const gundam = '754qvh7p56n2636z6u8dt2qc';
+const gundam = 'y4fbdz8bvqvna45ge6q99dwe'; 
 //HTML Elements
 const flightDiv = document.getElementById('flight-info');
 const flightBtn = document.getElementById('flight-btn');
@@ -43,10 +43,13 @@ let totalDuration;
 let origin;
 let destination;
 let returnCall = false;
+let falseOrigin = [];
+let falseDestination = [];
 let departureInfo; 
 let transferInfo; 
 let arrivalInfo;
 let flightInfo;
+let searchedName;
 let outboundData = [];
 let returnData = [];
 let entireArray = [];
@@ -106,7 +109,7 @@ function cityArray(name){
    destinationArray.length && originArray.length > 0? nearestAirport(): console.log('loaded', destinationArray.length, originArray.length);
 };
 
-//Use Lufthansa API and Latitude and Longitude to Search for Nearest Airport to User's Input Origin and and Destination Cities - Returned as City Codes
+//Use Lufthansa API and Latitude and Longitude to Search for Nearest Airport to User's Input Origin and and Destination Cities
 function nearestAirport() {
     userInput.geocoded.origin.lat = originArray[0];
     userInput.geocoded.origin.lon = originArray[1];
@@ -121,6 +124,7 @@ function nearestAirport() {
     const originQuery = `https://api.lufthansa.com/v1/mds-references/airports/nearest/${originLat},${originLon}`;
     const destinationQuery = `https://api.lufthansa.com/v1/mds-references/airports/nearest/${destinationLat},${destinationLon}`;
 
+    //Isolate the City Code of the City In Which the Nearest Airport is Located
     // Fetch requests
     Promise.all([
         fetch(originQuery , {
@@ -140,7 +144,7 @@ function nearestAirport() {
 
                 return code;
         }).then((code)=>{
-                console.log('input2', userInput.geocoded.origin.cityCode);
+                // console.log('input2', userInput.geocoded.origin.cityCode);
                 const codeArray = [code,1];
                 code ? outbound(codeArray) : errorCode(userOrigin); 
         }).catch((err)=>{
@@ -152,6 +156,8 @@ function nearestAirport() {
                 const code = data2.NearestAirportResource.Airports.Airport[0].CityCode;
                 userInput.geocoded.destination.cityCode = code;
                 let airportArray = data2.NearestAirportResource.Airports.Airport;
+                
+                //Collect an Array of Surrounding Airport Namess and Their Corresponding Codes to Identify the Airport Code Later in the Flight Search
                 airportArray.map((item)=>{
                     let airportCode = item.AirportCode;
                     let airportName = item.Names.Name[1]['$'];
@@ -167,11 +173,11 @@ function nearestAirport() {
       ]);
 };
 
-//Use City Codes to Populate Query URL for Outbound Flights, Then Call API Again for Flight Information
+//Use City Codes to Populate Query URL for Outbound Flights, Then Call API for Flight Information
     function outbound (code) {
-        console.log(code[0]);
+        // console.log(code[0]);
         code.length === 2 ? originCode = code[0]: destinationCode = code;
-        console.log('outbound', originCode, destinationCode);
+        // console.log('outbound', originCode, destinationCode);
         if (originCode && destinationCode) {
             query = `https://api.lufthansa.com/v1/operations/schedules/${originCode}/${destinationCode}/${userInput.departureDate}`;  
             flightData(origin, destination, flightInfo);
@@ -187,6 +193,9 @@ function nearestAirport() {
 
 //Call Lufthansa Flight API and Store Flight Details in Various Variables and Arrays
 function flightData(departureCity, arrivalCity,arr) {  
+    origin='';
+    destination ='';
+
     //Fetch request
         fetch(query , {
             headers: {Authorization: `Bearer ${gundam}`}
@@ -206,21 +215,29 @@ function flightData(departureCity, arrivalCity,arr) {
             //Flight Information
             //Origin City
             origin = departureCity;
-            // userInput.geocoded.origin.airportName = 'Airport';
-            // userInput.geocoded.destination.airportName = 'Airport';
 
-            //Flight Origin Airport
+            //Flight Origin Airport Code
             const outboundDepAirport = flight?.Departure.AirportCode;
 
             isReturn ? userInput : userInput.geocoded.origin.airportCode = outboundDepAirport;
            
-            userInput.geocoded.origin.airportName = `Airport: ${userInput.geocoded.origin.airportCode}`;
+            //Compare the Airport Code with the Array of Airport Codes and Names Generated Earlier During the Nearest Airport Request. If the Aiport Code Matches One In the Array of Airport Codes and Names, the Corresponding Airport Name is Assigned to the Flight Information 
             //Origin Airport Name
+            falseOrigin = [];
             originCodeArray.map((item)=>{
-                item.code === outboundDepAirport ? userInput.geocoded.origin.airportName = item.name : item;
+                item.code === outboundDepAirport ? userInput.geocoded.origin.airportName = item.name : falseOrigin.push('false');
             });
 
+            //If there Isn't a Match, the getAirportName Function Is Called
 
+            if (isReturn){
+                origin;
+            } else{
+            falseOrigin.length === originCodeArray.length ? getAirportName(outboundDepAirport) : console.log('Flight Data Airport Name', userInput.geocoded.origin.airportName);
+            
+            let originTime = setTimeout(()=>{userInput.geocoded.origin.airportName = searchedName; console.log('from timeout', userInput.geocoded.origin.airportName)},400);
+        }
+            
             isReturn ? destination = userInput.geocoded.origin.airportName : origin = userInput.geocoded.origin.airportName;
 
             //Origin Flight Number
@@ -245,7 +262,7 @@ function flightData(departureCity, arrivalCity,arr) {
             const transferArrAirport = flight?.Arrival.AirportCode;
 
             //Transfer Stopover
-            const stopover = 'stopover';
+            const stopover = 'Stopover';
 
             isDirect ? flight = data?.ScheduleResource.Schedule[0].Flight : flight = data?.ScheduleResource.Schedule[0]?.Flight[2] ||  data?.ScheduleResource.Schedule[0].Flight[1] ;
 
@@ -272,9 +289,19 @@ function flightData(departureCity, arrivalCity,arr) {
             //Outbound Flight Arrival Airport
             const outboundArrAirport = flight?.Arrival.AirportCode;
 
+            falseDestination=[];
             destinationCodeArray.map((item)=>{
-                item.code === outboundArrAirport ? userInput.geocoded.destination.airportName = item.name : item;
+                item.code === outboundArrAirport ? userInput.geocoded.destination.airportName = item.name : falseDestination.push('false');
             });
+
+            if (isReturn){
+                destination;
+            } else{
+            falseDestination.length === destinationCodeArray.length ? getAirportName(outboundDepAirport) : console.log('Flight Data Airport Name', userInput.geocoded.origin.airportName);
+            
+            let originTime = setTimeout(()=>{userInput.geocoded.origin.airportName = searchedName; console.log('from timeout', userInput.geocoded.origin.airportName)},400);
+        }
+        console.log('destination', destination);
             
             isReturn ? userInput : userInput.geocoded.destination.airportCode = outboundArrAirport;
 
@@ -302,6 +329,22 @@ function flightData(departureCity, arrivalCity,arr) {
             errorMessage (errorMsg);
         });
         return flightInfo;
+};
+
+//Get Airport Name from Its Aiport Code If It Isn't In the Nearest Aiport Array
+function getAirportName(airportCode){
+    searchedName = 'Airport';
+    let code = airportCode;
+
+    const nameQuery = `https://api.lufthansa.com/v1/mds-references/airports/${code}?limit=20&offset=0&LHoperated=0`;
+    fetch(nameQuery , {
+        headers: {Authorization: `Bearer ${gundam}`}
+    }).then((response) => {return response.json()}).then((data) => {  
+            searchedName = data?.AirportResource.Airports.Airport.Names.Name[1]['$'] | 'Airport';
+            
+    }).catch((err)=>{
+        errorMessage (errorMsg);
+    });
 };
 
 //Prepare Flight Data to Be Rendered in the Browser
@@ -337,11 +380,22 @@ function flightData(departureCity, arrivalCity,arr) {
 //Create HTML Elements to Render Data in the Browser 
     function renderData(arr){
         //Centre Div Information
-        let outboundCentrepiece = outboundArray[1][4].duration || ' ';
-        const outboundCentreInfo = ['<hr>', '', outboundCentrepiece, '', '<hr>'] ;
-        let returnCentrepiece = returnArray[1][4].duration || ' ';
-        const returnCentreInfo = ['<hr>', '', returnCentrepiece, '', '<hr>'] ;
+        // let outboundCentrepiece = outboundArray[1][4].duration || ' ';
+         
+        let onePlane = '<span id="more-planes"><i class="fa-solid fa-plane one more-plane"></i></span>'
+        let twoPlanes = '<span id="centre-planes"><i class="fa-solid fa-plane"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-plane"></span>'
+        let outboundCentrepiece;
+        // const outboundCentreInfo = ['', '', outboundCentrepiece, '', ''] ;
+        // let returnCentrepiece = returnArray[1][4].duration || ' ';
+        let returnCentrepiece = '<i class="fa-solid fa-plane"></i>';
+        let moreCentrepiece = onePlane;
         
+        outboundArray[1][4].duration ? outboundCentrepiece = twoPlanes : outboundCentrepiece = onePlane;
+        returnArray[1][4].duration ? returnCentrepiece = twoPlanes : returnCentrepiece = onePlane;
+
+        const outboundCentreInfo = ['', '', outboundCentrepiece, '', ''] ;
+        const returnCentreInfo = ['', '', returnCentrepiece, '', ''];
+
         //Container for Flight Elements
         const flightContainer = document.createElement('div')
         flightContainer.setAttribute('id', 'flight-container');
@@ -429,7 +483,7 @@ function flightData(departureCity, arrivalCity,arr) {
         const moreCentreDivO = document.createElement('div')
         moreCentreDivO.setAttribute('class', `more-o-centre`);
         const moreCentreTextboxO = document.createElement('div')
-        moreCentreTextboxO.setAttribute('class', `more-o-centre-textbox`);
+        moreCentreTextboxO.setAttribute('class', `more-centre-textbox-o`);
         
         //More Info Destination Arrival Divs
         const moreArrivalDivO = document.createElement('div')
@@ -455,7 +509,7 @@ function flightData(departureCity, arrivalCity,arr) {
         const moreCentreDivR = document.createElement('div')
         moreCentreDivR.setAttribute('class', `more-r-centre`);
         const moreCentreTextboxR = document.createElement('div')
-        moreCentreTextboxR.setAttribute('class', `more-r-centre-textbox`);
+        moreCentreTextboxR.setAttribute('class', `more-centre-textbox-r`);
        
         //More Info Return Transfer Arrival Divs
         const moreArrivalDivR = document.createElement('div')
@@ -555,6 +609,8 @@ function flightData(departureCity, arrivalCity,arr) {
                     $('.more-div').slideUp();
                     arrivalTextboxO.innerHTML = outArrText;
                     departureTextboxR.innerHTML = retDepText;
+                    centreTextboxO.innerHTML = twoPlanes;
+                    centreTextboxR.innerHTML = twoPlanes;
                     moreBtn.innerHTML = 'See more';
 
                 } else{
@@ -562,6 +618,8 @@ function flightData(departureCity, arrivalCity,arr) {
                     moreInfoDiv.style.display='block';
                     arrivalTextboxO.innerHTML = moreArrivalTextboxOT.innerHTML;
                     departureTextboxR.innerHTML = moreDepartureTextboxRT.innerHTML;
+                    centreTextboxO.innerHTML = onePlane;
+                    centreTextboxR.innerHTML = onePlane;
                     moreBtn.innerHTML = 'See less';
             } ;    
             });
@@ -570,6 +628,9 @@ function flightData(departureCity, arrivalCity,arr) {
             //More Info Divs
             moreArrivalTextboxO.innerHTML = arrivalTextboxO.innerHTML;
             moreDepartureTextboxR.innerHTML = departureTextboxR.innerHTML;
+            moreCentreTextboxO.innerHTML = moreCentrepiece;
+            moreCentreTextboxR.innerHTML = moreCentrepiece;
+
 
             moreInfoOutboundDisplay.append(moreDepartureTextboxO, moreCentreTextboxO,moreArrivalTextboxO);
             moreInfoOutbound.append(moreInfoOutboundTitle, moreInfoOutboundDisplay);
@@ -606,6 +667,7 @@ function flightData(departureCity, arrivalCity,arr) {
             //Append Div to the index.html Div.
             flightDiv.append(flightContainer);
 
+            //Hide Spinner
             spinner.style.display="none";
 
             if (isDirect){
