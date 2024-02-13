@@ -4,12 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-}
-
-* {
     box-sizing: border-box;
-    padding: 0;
-    margin: 0;
 }
 
 body {
@@ -67,12 +62,13 @@ p {
     width: 900px;
 }
 
-/* Styling for the Msin Content Section */
+/* Styling for the Main Content Section */
 .grid-container{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 500px;
     gap: 10px;  
+    min-height: 450vh;
 }
 
 .first {
@@ -194,6 +190,51 @@ background-color: #dc7769;
 .footer h2 {
     font-size: 10px;
     clear: both;
+}
+
+footer ul {
+    width: 95vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left:3.5vw;
+    margin-bottom:-2px;
+}
+
+.icons {
+    height: 1.5vw;
+    margin-right: 15px;
+}
+
+#fb {
+    background-image: url('../image/fb-2.png');
+}
+
+#in {
+    background-image: url('../image/in-2.png');
+}
+
+#x {
+    background-image: url('../image/x-2.png');
+}
+
+#fb,#in,#x,#fb:hover,#in:hover,#x:hover {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20px;
+    width: 20px;
+}
+
+#fb:hover {
+    background-image: url('../image/fb-1.png');
+}
+
+#in:hover {
+    background-image: url('../image/in-1.png');
+}
+
+#x:hover {
+    background-image: url('../image/x-1.png');
 }
 
 /* Responsiveness for Smaller Devices */
